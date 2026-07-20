@@ -1,3 +1,22 @@
+// ============================================================
+//  FOR LOOPS IN GO — with Python Comparisons
+// ============================================================
+//  Go has ONE looping keyword: `for`. Everything is built from it.
+//  There is NO while, no do-while, no until.
+//
+// ┌──────────────────────┬────────────────────────────────────────────────┐
+// │        Go            │                 Python                         │
+// ├──────────────────────┼────────────────────────────────────────────────┤
+// │ for init; cond; post │ for i in range(n):  — counted iteration        │
+// │ for condition        │ while condition:     — condition-only loop     │
+// │ for { }              │ while True:          — infinite loop           │
+// │ for _, v := range    │ for v in iterable:   — collection iteration    │
+// │                      │ for i, v in enumerate(s):  — with index       │
+// │                      │                                                │
+// │ ONE keyword          │ for + while (two keywords)                     │
+// └──────────────────────┴────────────────────────────────────────────────┘
+// ============================================================
+
 package main
 
 import ("fmt")
@@ -19,6 +38,17 @@ func main() {
 	//   3. print, then post (i++)
 	//   4. condition -> true?  ->  enter body
 	//   ... repeat until condition is false
+	//
+	// Python equivalent:
+	//   for i in range(5):          # range(5) = [0, 1, 2, 3, 4]
+	//       print("The value of i is:", i)
+	//
+	// Key differences:
+	//   - Python's range() generates values (lazily)
+	//   - Go's for-loop structure mirrors C/Java
+	//   - In Python, you CANNOT modify i inside the loop to
+	//     affect iteration count (range yields the next value).
+	//     In Go, you CAN modify i (but shouldn't — it's confusing).
 	// ============================================================
 	for i := 0; i < 5; i++ {
 		fmt.Println("The value of i is: ", i)
@@ -37,6 +67,13 @@ func main() {
 	// The 'break' keyword terminates the loop entirely and
 	// execution resumes at the first statement after the loop.
 	// Here, when j == 3, the loop stops — so only 0, 1, 2 print.
+	//
+	// Python:
+	//   for j in range(5):
+	//       if j == 3:
+	//           break
+	//       print("The value of j is:", j)
+	//   # break works the same way in both languages!
 	// ============================================================
 	for j := 0; j < 5; j++ {
 		if j == 3 {
@@ -56,6 +93,13 @@ func main() {
 	// The 'continue' keyword skips the remaining body of the
 	// current iteration and jumps to the post statement (i++),
 	// then rechecks the condition. Here k == 2 is skipped entirely.
+	//
+	// Python:
+	//   for k in range(5):
+	//       if k == 2:
+	//           continue
+	//       print("The value of k is:", k)
+	//   # continue works the same way in both languages!
 	// ============================================================
 	for k := 0; k < 5; k++ {
 		if k == 2 {
@@ -83,6 +127,15 @@ func main() {
 	//   3. go back to step 1
 	// The variable m is declared and incremented manually inside
 	// the body, giving full control over the loop variable.
+	//
+	// Python:
+	//   m = 0
+	//   while m < 5:
+	//       print("The value of m is:", m)
+	//       m += 1
+	//   # Python uses a DIFFERENT keyword (while) for this pattern.
+	//   # Go uses the SAME keyword (for) with fewer clauses.
+	//   # This is Go's philosophy: one way to loop, many patterns.
 	// ============================================================
 	m := 0
 	for m < 5 {
@@ -108,6 +161,16 @@ func main() {
 	//   - interactive menus (waiting for "quit" input)
 	//
 	// Here we manually break when n reaches 5 to avoid hanging.
+	//
+	// Python:
+	//   n = 0
+	//   while True:
+	//       if n == 5:
+	//           break
+	//       print("The value of n is:", n)
+	//       n += 1
+	//   # Python uses `while True:` — Go uses `for { }`
+	//   # Both express the same idea: "loop until something happens"
 	// ============================================================
 	n := 0
 	for {
@@ -139,6 +202,16 @@ func main() {
 	//   - Use _ (blank identifier) to discard either return value
 	//   - For maps: range returns (key, value) pairs in random order
 	//   - For strings: range iterates over runes, not bytes
+	//
+	// Python:
+	//   for idx, val in enumerate(nums):       # with index
+	//       print(f"Index: {idx}, Value: {val}")
+	//   for val in nums:                        # value only
+	//       print(val)
+	//   # Python's enumerate() gives (index, value) like Go's range.
+	//   # But Go's range works on MULTIPLE types natively.
+	//   # Python needs different functions: enumerate, dict.items, etc.
+	//   # Go uses `range` for ALL iterable types — uniform syntax.
 	// ============================================================
 	nums := []string{"a", "b", "c"}
 	for idx, val := range nums {
@@ -150,15 +223,71 @@ func main() {
 	//   Index: 2, Value: c
 
 	// ============================================================
-	//  SUMMARY: For Loop Variants in Go
+	//  LABELED BREAK — exit from nested loops
+	//  Go-specific feature — Python has no equivalent
 	// ============================================================
-	//  ┌────────────────────┬──────────────────────────────────┐
-	//  │ Form               │ Use case                         │
-	//  ├────────────────────┼──────────────────────────────────┤
-	//  │ for init; c; post  │ Counted iteration (classic for)  │
-	//  │ for condition      │ While-style loop                 │
-	//  │ for { }            │ Infinite loop (+ break to exit)  │
-	//  │ for _, v := range  │ Iterate over collections         │
-	//  └────────────────────┴──────────────────────────────────┘
+	// Go allows you to LABEL a for loop and break/continue to
+	// that specific label. This is useful for breaking out of
+	// nested loops.
+	//
+	// Python:
+	//   # Python has NO labeled break. You'd use:
+	//   #   - A flag variable
+	//   #   - A function + return
+	//   #   - raise StopIteration (ugly)
+	//   #   - for...else with break (limited)
+	//   # Go's labeled break is cleaner for deep nesting.
+	// ============================================================
+	fmt.Println("\nLabeled break example:")
+outer:
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			if i*j > 2 {
+				fmt.Printf("Breaking at i=%d, j=%d\n", i, j)
+				break outer // <-- exits BOTH loops
+			}
+			fmt.Printf("  i=%d, j=%d\n", i, j)
+		}
+	}
+	// Output:
+	//   i=0, j=0
+	//   i=0, j=1
+	//   i=0, j=2
+	//   i=1, j=0
+	//   i=1, j=1
+	//   i=1, j=2
+	//   Breaking at i=2, j=0
+
+	// ============================================================
+	//  FOR-RANGE OVER MAP (keys only)
+	// ============================================================
+	// Python:  for k in my_dict:
+	// ============================================================
+	capitals := map[string]string{"Japan": "Tokyo", "France": "Paris", "India": "New Delhi"}
+	fmt.Println("\nRange over map (keys only):")
+	for country := range capitals { // value omitted — just keys
+		fmt.Println(" ", country)
+	}
+	// Output order will VARY (maps are random order in Go!)
+	// Python 3.7+ preserves insertion order.
+
+	// ============================================================
+	//  SUMMARY: For Loop Variants in Go (with Python comparison)
+	// ============================================================
+	//  ┌────────────────────┬────────────────────┬──────────────────────────────┐
+	//  │ Go Form            │ Python Equivalent  │ Use case                     │
+	//  ├────────────────────┼────────────────────┼──────────────────────────────┤
+	//  │ for init; c; post  │ for i in range(n)  │ Counted iteration            │
+	//  │ for condition      │ while cond:        │ Condition-only loop          │
+	//  │ for { }            │ while True:        │ Infinite loop (+ break)      │
+	//  │ for _, v := range  │ for v in iterable  │ Iterate over collections     │
+	//  │ for i, v := range  │ for i,v in enum()  │ Iterate with index           │
+	//  │ label: for {break} │ (no direct equiv)  │ Break from nested loops      │
+	//  └────────────────────┴────────────────────┴──────────────────────────────┘
+	//
+	// Bottom line: Go does MORE with ONE keyword (for) than Python
+	// does with TWO (for + while). Go adds labeled breaks for nested
+	// loops (which Python lacks). But Go has no else clause on loops
+	// (Python's for...else and while...else).
 	// ============================================================
 }
