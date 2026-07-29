@@ -50,8 +50,18 @@ GoLan/
 │   └── pointers.go                 # & and * operators
 ├── strings-and-runes/
 │   └── strings-and-runes.go        # UTF-8, runes, byte vs char
-└── Generics/
-    └── generics.go                 # Type params, constraints, generic stack
+├── Generics/
+│   └── generics.go                 # Type params, constraints, generic stack
+├── GoRoutines/
+│   └── goroutines.go               # go keyword, WaitGroup, closure gotcha
+├── Channels/
+│   ├── channel.go                  # Unbuffered/buffered, close, range, Lego analogy
+│   └── README.md
+├── Concurrency/
+│   └── concurrency.go              # Fan-out/fan-in, select, mutex, concurrency vs parallelism
+└── Memory/
+    ├── memory.go                   # Stack vs heap, escape analysis examples
+    └── escape-analysis.go          # Deep dive: -gcflags="-m", 10 escape rules
 ```
 
 ---
@@ -610,7 +620,224 @@ for i, r := range s {          // range decodes UTF-8 automatically
 
 ---
 
-### 21. Generics — [`Generics/generics.go`](Generics/generics.go)
+---
+
+### 22. Channels — [`Channels/channel.go`](Channels/channel.go)
+
+**Concepts:** unbuffered channels, buffered channels, send/receive, close, range, goroutine synchronization
+
+**Analogy:** Two friends (Alex & Sam) passing Lego bricks through a pipe in the wall.
+
+```go
+pipe := make(chan string)          // unbuffered — one brick at a time
+shelfPipe := make(chan string, 3)  // buffered — shelf holds 3 bricks
+
+pipe <- "🧱 Red brick"              // send (Alex pushes into pipe)
+brick := <-pipe                    // receive (Sam pulls from pipe)
+
+close(shelfPipe)                   // "No more bricks!"
+for brick := range shelfPipe { }   // Keep pulling until closed
+```
+
+| Go Concept | Lego Analogy |
+|---|---|
+| `make(chan T)` | Empty pipe, 1 brick fits |
+| `make(chan T, N)` | Pipe with shelf for N bricks |
+| `ch <- value` | Push brick into pipe |
+| `value := <-ch` | Pull brick from pipe |
+| `close(ch)` | "That's all I have!" |
+| `for v := range ch` | Keep pulling until empty |
+
+**Compared to Python:**
+
+| Operation | Go | Python |
+|---|---|---|
+| Create | `ch := make(chan T)` | `q = queue.Queue()` |
+| Send | `ch <- val` | `q.put(val)` |
+| Receive | `val := <-ch` | `q.get()` |
+| Close | `close(ch)` | Sentinel value |
+
+**Scenario 1:** Unbuffered — sync handoff, both must be ready
+**Scenario 2:** Buffered — async up to buffer size
+**Scenario 3:** Two-way channels — swap bricks between builders
+**Scenario 4:** Close + range — "no more bricks"
+
+---
+
+### 23. Goroutines — [`GoRoutines/goroutines.go`](GoRoutines/goroutines.go)
+
+**Concepts:** go keyword, sync.WaitGroup, closure capture, anonymous goroutines, concurrent timing
+
+```go
+go myFunction()        // Start goroutine — returns immediately
+
+var wg sync.WaitGroup
+wg.Add(1)              // Register worker
+go func() {
+    defer wg.Done()    // Signal completion
+    // ... work ...
+}()
+wg.Wait()              // Wait for all workers
+```
+
+**Loop closure gotcha (Go < 1.22):**
+```go
+// WRONG — all goroutines see LAST value of i
+for i := 0; i < 3; i++ {
+    go func() { fmt.Println(i) }()  // prints 3, 3, 3
+}
+
+// RIGHT — pass as argument (copy)
+for i := 0; i < 3; i++ {
+    go func(id int) { fmt.Println(id) }(i)  // prints 0, 1, 2
+}
+```
+
+| Concept | Explanation |
+|---|---|
+| `go fn()` | Start fn() as goroutine (non-blocking) |
+| `sync.WaitGroup` | Counter: Add → Done → Wait |
+| Stack size | ~2 KB (vs ~8 MB for OS threads) |
+| Closure capture | Loop variables shared by ref — pass as arg! |
+
+---
+
+### 24. Concurrency — [`Concurrency/concurrency.go`](Concurrency/concurrency.go)
+
+**Concepts:** concurrency vs parallelism, select statement, mutex, fan-out/fan-in pattern
+
+```go
+// Select — wait on multiple channels (race)
+select {
+case msg := <-ch1:
+    fmt.Println("Cache responded first:", msg)
+case msg := <-ch2:
+    fmt.Println("DB responded first:", msg)
+case <-time.After(100 * time.Millisecond):
+    fmt.Println("Timeout!")
+}
+
+// Mutex — protect shared data
+var mu sync.Mutex
+mu.Lock()
+sharedCounter++  // Only one goroutine at a time
+mu.Unlock()
+
+// Fan-out / Fan-in — distribute work to workers, collect results
+jobs := make(chan int, 5)
+results := make(chan int, 5)
+// Start 3 workers (fan-out)
+for w := 1; w <= 3; w++ {
+    go worker(w, jobs, results)
+}
+// Collect results (fan-in)
+for result := range results {
+    fmt.Println(result)
+}
+```
+
+**Concurrency vs Parallelism:**
+
+| | Concurrency | Parallelism |
+|---|---|---|
+| What | Structure (dealing with many things) | Execution (doing many things) |
+| How | Goroutines switch between tasks | Multiple CPU cores run simultaneously |
+| Go's role | Built-in (`go` keyword + `chan`) | Runtime decides, hardware dependent |
+
+| Python | Go |
+|---|---|
+| `threading.Lock()` | `sync.Mutex{}` |
+| `asyncio.wait(FIRST_COMPLETED)` | `select { case ... }` |
+| Complex worker pools | Simple `go fn()` + `chan` |
+
+---
+
+### 26. Go Scheduler (G-P-M Engine) — [`Go-GPM-Engine/LEARN.md`](Go-GPM-Engine/LEARN.md)
+
+**Concepts:** G (goroutine), P (processor), M (machine/thread), work stealing, continuation stealing, GOMAXPROCS, M:N scheduling
+
+The Go scheduler multiplexes millions of goroutines onto a few OS threads. The three actors: **G** (task), **P** (logical CPU/desk), **M** (OS thread). Key insights:
+- Each P has its own **local run queue** of Gs
+- **Work stealing** — idle Ps steal half the work from busy Ps
+- **Continuation stealing** — Go jumps into new goroutines immediately (cache warm)
+- Blocking syscalls: M releases P, new M takes over (no CPU idle)
+- Monitor with: `GODEBUG=schedtrace=1000`
+
+### 27. Garbage Collector — [`Go-Garbage-Collector/LEARN.md`](Go-Garbage-Collector/LEARN.md)
+
+**Concepts:** Non-generational tri-color mark-sweep, write barrier, GC assist, GOGC tuning
+
+Go's GC is **concurrent** (most phases run alongside your program):
+- **White** = unvisited (dead), **Gray** = visited, in-progress, **Black** = fully scanned (alive)
+- **Write barrier** — prevents hiding a white object behind a black one during GC
+- **GC Assist** — if you allocate faster than GC can mark, you help clean
+- **GOGC=100** — start GC when heap doubles (tunable)
+- Monitor with: `GODEBUG=gctrace=1`
+
+### 28. Concurrency Pipelines — [`Go-Pipelines/LEARN.md`](Go-Pipelines/LEARN.md)
+
+**Concepts:** Pipeline pattern, fan-out, fan-in, worker pools, context cancellation, rate limiting, bounded parallelism
+
+Build scalable data processing pipelines:
+- **Pipeline** = stages connected by channels (each stage = goroutine)
+- **Fan-out** = distribute work across N worker goroutines
+- **Fan-in** = merge N result channels into one (use WaitGroup)
+| Factory assembly line analogy
+- Use `context.Context` for cancellation, bounded parallelism for stability
+
+### 29. Interface Internals (iface & eface) — [`Go-Interface-Internals/LEARN.md`](Go-Interface-Internals/LEARN.md)
+
+**Concepts:** iface, eface, itab, type assertions, "nil is not nil" bug
+
+Go interfaces are **two-word data structures** (16 bytes):
+- **eface** (`any`): `{_type, data}` — used for empty interface
+- **iface** (method interface): `{itab, data}` — itab caches method dispatch (O(1))
+- **"Nil is not nil"** — returning nil pointer as interface creates non-nil iface (itab non-nil, data nil)
+| Type assertion is O(1) pointer comparison
+
+### 25. Memory (Stack vs Heap) — [`Memory/memory.go`](Memory/memory.go)
+
+**Concepts:** stack allocation, heap allocation, escape analysis, garbage collection
+
+```go
+// STACK — returned by value (copy)
+func staysOnStack() int {
+    x := 42        // stays on stack
+    return x       // copy goes to caller
+}
+
+// HEAP — address returned (escape!)
+func escapesToHeap() *int {
+    x := 42        // compiler sees &x returned → HEAP
+    return &x
+}
+```
+
+**Visual memory map:**
+```
+STACK (fast, automatic):          HEAP (slower, GC-managed):
+┌──────────────────────┐         ┌──────────────────────┐
+│ main() frame         │         │ {Blue, 6}            │
+│  ├─ heapBrick = ptr ─┼──────→  │ [10, 20, 30]         │
+│  └─ house =          │         └──────────────────────┘
+│     {Lego House,100} │
+└──────────────────────┘
+```
+
+**Escape analysis — `go build -gcflags="-m"`**
+
+See dedicated file: [`Memory/escape-analysis.go`](Memory/escape-analysis.go) with 10 rules showing exactly when values escape to heap:
+
+| Trigger | Stack? | Heap? |
+|---|---|---|
+| `x := 42; return x` | ✅ | |
+| `x := 42; return &x` | | ✅ |
+| `fmt.Println(x)` | | ✅ (interface{}) |
+| `global = &x` | | ✅ |
+| Closure capture | | ✅ |
+| `make([]int, n)` | | ✅ |
+
+**Compared to Python:** Python has NO stack allocation for user types — everything is heap-allocated. Go's escape analysis is a major performance advantage.
 
 **Concepts:** type parameters `[T any]`, constraints, generic structs, generic functions
 
@@ -666,6 +893,13 @@ go run "Struct-Embedding/struct-embedding.go"
 go run Pointers/pointers.go
 go run strings-and-runes/strings-and-runes.go
 go run Generics/generics.go
+	go run Channels/channel.go
+	go run GoRoutines/goroutines.go
+	go run Concurrency/concurrency.go
+	go run Memory/memory.go
+
+	# Escape analysis compiler output
+	go build -gcflags="-m" Memory/escape-analysis.go
 
 # Reference-only files (package not main — read for learning)
 # Variables/Declare Variables.go   — package variables
@@ -685,11 +919,11 @@ Check out the full [[Roadmap]] in the Second Brain vault for a complete topic tr
 | Level | Coverage |
 |---|---|
 | Level 1 — Core Go (37 topics) | 23 ✅ (62%) |
-| Level 2 — Production Go (27 topics) | ❌ Not started |
+| Level 2 — Production Go (27 topics) | 8 ✅ (30% — Concurrency + Runtime internals) |
 | Level 3 — Industry Backend (41 topics) | ❌ Not started |
-| **Total** | **22%** |
+| **Total** | **30%** |
 
-**Up next:** Implement full Structs examples, then error handling → defer/panic → packages/modules.
+**Up next:** Runnable Go code examples for G-P-M, GC, pipelines, and interfaces. Then Standard Library → File I/O → JSON → HTTP → Testing.
 
 ---
 
