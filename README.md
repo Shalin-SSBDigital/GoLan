@@ -4,7 +4,9 @@ I'm learning Go and making my own docs because the official ones are **so boring
 
 This repo is my personal reference — every concept explained in plain language with runnable examples, detailed comments, and Python comparisons where it helps.
 
-**Progress:** 21 topics covered across Level 1 (Core Go). See the full [[Roadmap]] in the Second Brain.
+**Progress:** Level 1 complete ✅ (36/37). See the full [[Roadmap]] in the Second Brain.
+
+> ⚠️ **Notice:** The `Interface/` folder is a duplicate of `Interfaces/` and will be cleaned up. This is the 1 remaining Level 1 item.
 
 ---
 
@@ -13,55 +15,109 @@ This repo is my personal reference — every concept explained in plain language
 ```
 GoLan/
 ├── README.md
+├── CLAUDE.md
 ├── Get Started/
-│   └── main.go                     # Hello World + package/import basics
+│   ├── main.go                     # Hello World + package/import basics
+│   └── README.md
 ├── Variables/
 │   ├── Declare Variables.go        # var vs :=, data types
 │   ├── Go Multiple Variable Declaration.go  # Parallel declaration
-│   └── Constants.go                # const, iota, immutability
+│   ├── Constants.go                # const, iota, immutability
+│   └── README.md
+├── Type Conversion/
+│   └── conversion.go               # int/float, strconv, string↔[]byte
+├── Operators/
+│   └── operators.go                # Arithmetic, comparison, bitwise, etc.
 ├── Output/
-│   └── output funtion.go           # fmt.Println, functions, basic func syntax
+│   ├── output funtion.go           # fmt.Println, functions, basic func syntax
+│   └── README.md
 ├── If-Else/
-│   └── Else.go                     # if, else, else if, logical operators
+│   ├── Else.go                     # if, else, else if, logical operators
+│   └── README.md
 ├── For/
-│   └── loop.go                     # All 4 for-loop forms + break/continue
+│   ├── loop.go                     # All 4 for-loop forms + break/continue
+│   └── README.md
+├── Switch/
+│   ├── switch.go                   # Expression switch, fallthrough, type switch
+│   └── README.md
 ├── Array /                         (note: trailing space in folder name)
 │   ├── arr.go                      # 1D arrays, 2D arrays, sparse init
 │   ├── Slices.go                   # make, append, copy, slice expressions
 │   └── maps.go                     # CRUD, comma-ok, nil map behavior
-├── Switch/
-│   └── switch.go                   # Expression switch, fallthrough, type switch
 ├── Functions/
 │   ├── function.go                 # Basic func syntax, named returns
 │   ├── Multiple Return Values.go   # Tuple-like returns, error pattern
 │   ├── Variadic Functions.go       # ...type, slice unpacking
-│   └── Closures.go                 # Closures, loop-variable gotcha
+│   ├── Closures.go                 # Closures, loop-variable gotcha
+│   └── README.md
+├── Recursion/
+│   └── recursion.go                # Factorial, fibonacci, tree traversal
 ├── Methods/
-│   └── Methods.go                  # Value/pointer receivers, Stringer
-├── Interface/                      (older duplicate — see Interfaces/)
-│   └── Interfaces.go               # Basic interface examples
+│   ├── Methods.go                  # Value/pointer receivers, Stringer
+│   └── README.md
+├── Interface/                      ⚠️ Duplicate — see Interfaces/
+│   ├── Interfaces.go               # Basic interface examples
+│   └── README.md
 ├── Interfaces/
-│   └── interfaces.go               # Comprehensive: composition, any, type switch
+│   ├── interfaces.go               # Comprehensive: composition, any, type switch
+│   └── README.md
 ├── Structs/
-│   └── Structs.go                  # ⚠️ Stub — placeholder only
+│   ├── Structs.go                  # Creation, tags, embedding, constructor pattern
+│   └── README.md
 ├── Struct-Embedding/
-│   └── struct-embedding.go         # Composition over inheritance
+│   ├── struct-embedding.go         # Composition over inheritance
+│   └── README.md
 ├── Pointers/
-│   └── pointers.go                 # & and * operators
+│   ├── pointers.go                 # & and * operators
+│   └── README.md
+├── Enums/
+│   └── enums.go                    # iota, String(), bitmasks
 ├── strings-and-runes/
-│   └── strings-and-runes.go        # UTF-8, runes, byte vs char
+│   ├── strings-and-runes.go        # UTF-8, runes, byte vs char
+│   └── README.md
+├── Strings-Builder/
+│   └── strings_builder.go          # Builder methods, Grow, vs +=
+├── Error Handling/
+│   └── errors.go                   # error interface, panic, recover, defer
+├── Packages-Modules/
+│   ├── go.mod                      # Module definition
+│   ├── main.go                     # Package usage examples
+│   ├── calculator/                 # Sub-package
+│   ├── config/                     # Sub-package
+│   ├── models/                     # Sub-package
+│   └── utils/                      # Sub-package
 ├── Generics/
-│   └── generics.go                 # Type params, constraints, generic stack
+│   ├── generics.go                 # Type params, constraints, generic stack
+│   └── README.md
 ├── GoRoutines/
-│   └── goroutines.go               # go keyword, WaitGroup, closure gotcha
+│   ├── goroutines.go               # go keyword, WaitGroup, closure gotcha
+│   ├── LEARN.md                    # Deep dive
+│   └── README.md
 ├── Channels/
 │   ├── channel.go                  # Unbuffered/buffered, close, range, Lego analogy
+│   ├── LEARN.md                    # Deep dive
 │   └── README.md
 ├── Concurrency/
-│   └── concurrency.go              # Fan-out/fan-in, select, mutex, concurrency vs parallelism
-└── Memory/
-    ├── memory.go                   # Stack vs heap, escape analysis examples
-    └── escape-analysis.go          # Deep dive: -gcflags="-m", 10 escape rules
+│   ├── concurrency.go              # Fan-out/fan-in, select, mutex
+│   ├── LEARN.md                    # Deep dive
+│   └── README.md
+├── Memory/
+│   ├── memory.go                   # Stack vs heap, escape analysis examples
+│   ├── escape-analysis.go          # Deep dive: -gcflags="-m", 10 escape rules
+│   ├── LEARN.md
+│   └── README.md
+├── Go-GPM-Engine/
+│   ├── LEARN.md                    # G-P-M scheduler deep dive
+│   └── README.md
+├── Go-Garbage-Collector/
+│   ├── LEARN.md                    # Tri-color mark-sweep, write barrier, GOGC
+│   └── README.md
+├── Go-Pipelines/
+│   ├── LEARN.md                    # Pipeline pattern, fan-out/fan-in
+│   └── README.md
+└── Go-Interface-Internals/
+    ├── LEARN.md                    # iface, eface, itab, nil-is-not-nil
+    └── README.md
 ```
 
 ---
@@ -620,9 +676,210 @@ for i, r := range s {          // range decodes UTF-8 automatically
 
 ---
 
+### 21. Type Conversion — [`Type Conversion/conversion.go`](Type%20Conversion/conversion.go)
+
+**Concepts:** int/float conversion, strconv (Itoa/Atoi), string↔[]byte, rune conversion, type assertion vs conversion
+
+```go
+var i int = 42
+var f float64 = float64(i)          // explicit conversion (no implicit)
+
+s := strconv.Itoa(42)               // "42"
+n, err := strconv.Atoi("42")        // 42, nil (returns error on fail)
+
+b := []byte("hello")                 // string → bytes
+str := string([]byte{104, 101})     // bytes → string
+```
+
+| Operation | Go | Python |
+|-----------|----|--------|
+| int → float | `float64(i)` | `float(i)` |
+| int → string | `strconv.Itoa(i)` | `str(i)` |
+| string → int | `strconv.Atoi(s)` | `int(s)` |
+| Type check | `v.(T)` or type switch | `isinstance(v, T)` |
+
+**Key rule:** Go requires **explicit** conversion — no automatic int→float like Python/Python.
+
 ---
 
-### 22. Channels — [`Channels/channel.go`](Channels/channel.go)
+### 22. Operators — [`Operators/operators.go`](Operators/operators.go)
+
+**Concepts:** arithmetic, comparison, logical, bitwise, assignment, increment/decrement
+
+```go
+a, b := 10, 3
+fmt.Println(a + b)    // 13 — arithmetic
+fmt.Println(a > b)    // true — comparison
+fmt.Println(a & b)    // 2   — bitwise AND
+a++                   // 11  — increment (statement, NOT expression)
+```
+
+**Compared to Python:**
+
+| Category | Go | Python |
+|----------|----|--------|
+| Increment | `i++` (statement only) | `i += 1` |
+| Exponentiation | `math.Pow(2, 3)` | `2 ** 3` |
+| Integer division | `3 / 2` = `1` (int) | `3 // 2` = `1` |
+| Ternary | ❌ No ternary | `x if c else y` |
+
+---
+
+### 23. Recursion — [`Recursion/recursion.go`](Recursion/recursion.go)
+
+**Concepts:** recursive functions, stack limits, iteration vs recursion
+
+```go
+func fact(n int) int {
+    if n == 0 { return 1 }
+    return n * fact(n - 1)
+}
+```
+
+| Aspect | Go | Python |
+|--------|----|--------|
+| Tail-call optimization | ❌ No | ❌ No |
+| Default stack limit | ~1 GB (goroutine) | ~1000 frames |
+| Recursion depth | Very deep (goroutine stack grows) | Shallow (fixed stack) |
+
+**Pattern:** Go favors iteration over recursion (no perf penalty for loops).
+
+---
+
+### 24. Structs — [`Structs/Structs.go`](Structs/Structs.go)
+
+**Concepts:** struct creation (4 ways), value/pointer semantics, nested/anonymous structs, struct tags, comparison, constructor pattern
+
+```go
+type User struct {
+    Name string
+    Age  int
+}
+
+// Creation patterns
+u1 := User{"Alice", 30}                    // positional
+u2 := User{Name: "Bob", Age: 25}           // named fields
+u3 := new(User)                             // pointer (all fields zero)
+u4 := &User{Name: "Charlie"}                // pointer with fields
+```
+
+| Feature | Go Struct | Python Class |
+|---------|-----------|--------------|
+| Constructor | Constructor function `NewUser()` | `__init__` |
+| Zero values | Auto-initialized | `__init__` required |
+| Inheritance | Embedding (composition) | Class inheritance |
+| Methods | Defined separately | Inside class body |
+| Tags | Struct tags (JSON, validation) | Decorators |
+
+---
+
+### 25. Enums (iota) — [`Enums/enums.go`](Enums/enums.go)
+
+**Concepts:** custom types, `iota` auto-increment, `String()` method, bitmasks, skip values
+
+```go
+type Day int
+const (
+    Monday Day = iota  // 0
+    Tuesday            // 1
+    Wednesday          // 2
+)
+
+func (d Day) String() string {
+    return [...]string{"Mon", "Tue", "Wed"}[d]
+}
+```
+
+| Pattern | Example | Use case |
+|---------|---------|----------|
+| Basic iota | `iota` from 0 | Sequential constants |
+| Skip values | `_`, `_` | Reserve numbers |
+| Bitmasks | `Flag1 = 1 << iota` | `1, 2, 4, 8...` |
+
+---
+
+### 26. String Builder — [`Strings-Builder/strings_builder.go`](Strings-Builder/strings_builder.go)
+
+**Concepts:** `strings.Builder`, `WriteString`, `Grow`, vs `+=` benchmark
+
+```go
+var sb strings.Builder
+sb.Grow(100)                            // pre-allocate (performance!)
+sb.WriteString("Hello")
+sb.WriteString(" ")
+sb.WriteString("World")
+result := sb.String()                   // "Hello World"
+```
+
+| Method | Performance | Use case |
+|--------|-------------|----------|
+| `+=` | ❌ Slow (new string each time) | Occasional concat |
+| `strings.Join` | ✅ Fast | Join slice with delimiter |
+| `strings.Builder` | ✅✅ Fastest | Many appends (loops) |
+| `fmt.Sprintf` | ⚠️ Medium | Formatting needed |
+
+---
+
+### 27. Error Handling — [`Error Handling/errors.go`](Error%20Handling/errors.go)
+
+**Concepts:** `error` interface, `errors.New`, `fmt.Errorf`, custom error types, wrapping, `errors.Is`/`As`, panic, recover, defer
+
+```go
+// Returning errors (idiomatic Go)
+func divide(a, b float64) (float64, error) {
+    if b == 0 {
+        return 0, errors.New("division by zero")
+    }
+    return a / b, nil
+}
+
+// Defer — cleanup that always runs
+func readFile(name string) ([]byte, error) {
+    f, err := os.Open(name)
+    if err != nil { return nil, err }
+    defer f.Close()                    // runs on return or panic
+    return io.ReadAll(f)
+}
+```
+
+| Concept | Go | Python |
+|---------|----|--------|
+| Error creation | `errors.New("msg")` | `Exception("msg")` |
+| Control flow | `if err != nil` | `try/except` |
+| Stack trace | Manual wrapping | Automatic |
+| "Finally" | `defer` | `finally` |
+| Crash | `panic()` | `raise` |
+| Recovery | `recover()` in defer | `except` |
+
+**Key pattern:** Go's "if err != nil" is NOT boilerplate — it's explicit error handling. Every path is visible.
+
+---
+
+### 28. Packages & Modules — [`Packages-Modules/`](Packages-Modules/)
+
+**Concepts:** exported vs unexported, multi-file packages, `init()`, `go.mod`, import paths, `go get`, blank import
+
+```go
+package calculator
+
+// Exported (capital letter)
+func Add(a, b int) int { return a + b }
+
+// Unexported (lowercase) — package-private
+func helper() int { return 42 }
+```
+
+| Concept | Go | Python |
+|---------|----|--------|
+| Module | `go.mod` file | `pyproject.toml` |
+| Import | `import "module/pkg"` | `import module.pkg` |
+| Export rule | Capital letter = public | Explicit `__all__` |
+| Init | `init()` per package | Module-level code |
+| Blank import | `import _ "pkg"` (for side effects) | Not idiomatic |
+
+---
+
+### 29. Channels — [`Channels/channel.go`](Channels/channel.go)
 
 **Concepts:** unbuffered channels, buffered channels, send/receive, close, range, goroutine synchronization
 
@@ -664,7 +921,7 @@ for brick := range shelfPipe { }   // Keep pulling until closed
 
 ---
 
-### 23. Goroutines — [`GoRoutines/goroutines.go`](GoRoutines/goroutines.go)
+### 30. Goroutines — [`GoRoutines/goroutines.go`](GoRoutines/goroutines.go)
 
 **Concepts:** go keyword, sync.WaitGroup, closure capture, anonymous goroutines, concurrent timing
 
@@ -702,7 +959,7 @@ for i := 0; i < 3; i++ {
 
 ---
 
-### 24. Concurrency — [`Concurrency/concurrency.go`](Concurrency/concurrency.go)
+### 31. Concurrency — [`Concurrency/concurrency.go`](Concurrency/concurrency.go)
 
 **Concepts:** concurrency vs parallelism, select statement, mutex, fan-out/fan-in pattern
 
@@ -752,50 +1009,7 @@ for result := range results {
 
 ---
 
-### 26. Go Scheduler (G-P-M Engine) — [`Go-GPM-Engine/LEARN.md`](Go-GPM-Engine/LEARN.md)
-
-**Concepts:** G (goroutine), P (processor), M (machine/thread), work stealing, continuation stealing, GOMAXPROCS, M:N scheduling
-
-The Go scheduler multiplexes millions of goroutines onto a few OS threads. The three actors: **G** (task), **P** (logical CPU/desk), **M** (OS thread). Key insights:
-- Each P has its own **local run queue** of Gs
-- **Work stealing** — idle Ps steal half the work from busy Ps
-- **Continuation stealing** — Go jumps into new goroutines immediately (cache warm)
-- Blocking syscalls: M releases P, new M takes over (no CPU idle)
-- Monitor with: `GODEBUG=schedtrace=1000`
-
-### 27. Garbage Collector — [`Go-Garbage-Collector/LEARN.md`](Go-Garbage-Collector/LEARN.md)
-
-**Concepts:** Non-generational tri-color mark-sweep, write barrier, GC assist, GOGC tuning
-
-Go's GC is **concurrent** (most phases run alongside your program):
-- **White** = unvisited (dead), **Gray** = visited, in-progress, **Black** = fully scanned (alive)
-- **Write barrier** — prevents hiding a white object behind a black one during GC
-- **GC Assist** — if you allocate faster than GC can mark, you help clean
-- **GOGC=100** — start GC when heap doubles (tunable)
-- Monitor with: `GODEBUG=gctrace=1`
-
-### 28. Concurrency Pipelines — [`Go-Pipelines/LEARN.md`](Go-Pipelines/LEARN.md)
-
-**Concepts:** Pipeline pattern, fan-out, fan-in, worker pools, context cancellation, rate limiting, bounded parallelism
-
-Build scalable data processing pipelines:
-- **Pipeline** = stages connected by channels (each stage = goroutine)
-- **Fan-out** = distribute work across N worker goroutines
-- **Fan-in** = merge N result channels into one (use WaitGroup)
-| Factory assembly line analogy
-- Use `context.Context` for cancellation, bounded parallelism for stability
-
-### 29. Interface Internals (iface & eface) — [`Go-Interface-Internals/LEARN.md`](Go-Interface-Internals/LEARN.md)
-
-**Concepts:** iface, eface, itab, type assertions, "nil is not nil" bug
-
-Go interfaces are **two-word data structures** (16 bytes):
-- **eface** (`any`): `{_type, data}` — used for empty interface
-- **iface** (method interface): `{itab, data}` — itab caches method dispatch (O(1))
-- **"Nil is not nil"** — returning nil pointer as interface creates non-nil iface (itab non-nil, data nil)
-| Type assertion is O(1) pointer comparison
-
-### 25. Memory (Stack vs Heap) — [`Memory/memory.go`](Memory/memory.go)
+### 32. Memory (Stack vs Heap) — [`Memory/memory.go`](Memory/memory.go)
 
 **Concepts:** stack allocation, heap allocation, escape analysis, garbage collection
 
@@ -839,6 +1053,53 @@ See dedicated file: [`Memory/escape-analysis.go`](Memory/escape-analysis.go) wit
 
 **Compared to Python:** Python has NO stack allocation for user types — everything is heap-allocated. Go's escape analysis is a major performance advantage.
 
+
+### 33. Go Scheduler (G-P-M Engine) — [`Go-GPM-Engine/LEARN.md`](Go-GPM-Engine/LEARN.md)
+
+**Concepts:** G (goroutine), P (processor), M (machine/thread), work stealing, continuation stealing, GOMAXPROCS, M:N scheduling
+
+The Go scheduler multiplexes millions of goroutines onto a few OS threads. The three actors: **G** (task), **P** (logical CPU/desk), **M** (OS thread). Key insights:
+- Each P has its own **local run queue** of Gs
+- **Work stealing** — idle Ps steal half the work from busy Ps
+- **Continuation stealing** — Go jumps into new goroutines immediately (cache warm)
+- Blocking syscalls: M releases P, new M takes over (no CPU idle)
+- Monitor with: `GODEBUG=schedtrace=1000`
+
+### 34. Garbage Collector — [`Go-Garbage-Collector/LEARN.md`](Go-Garbage-Collector/LEARN.md)
+
+**Concepts:** Non-generational tri-color mark-sweep, write barrier, GC assist, GOGC tuning
+
+Go's GC is **concurrent** (most phases run alongside your program):
+- **White** = unvisited (dead), **Gray** = visited, in-progress, **Black** = fully scanned (alive)
+- **Write barrier** — prevents hiding a white object behind a black one during GC
+- **GC Assist** — if you allocate faster than GC can mark, you help clean
+- **GOGC=100** — start GC when heap doubles (tunable)
+- Monitor with: `GODEBUG=gctrace=1`
+
+### 35. Concurrency Pipelines — [`Go-Pipelines/LEARN.md`](Go-Pipelines/LEARN.md)
+
+**Concepts:** Pipeline pattern, fan-out, fan-in, worker pools, context cancellation, rate limiting, bounded parallelism
+
+Build scalable data processing pipelines:
+- **Pipeline** = stages connected by channels (each stage = goroutine)
+- **Fan-out** = distribute work across N worker goroutines
+- **Fan-in** = merge N result channels into one (use WaitGroup)
+| Factory assembly line analogy
+- Use `context.Context` for cancellation, bounded parallelism for stability
+
+### 36. Interface Internals (iface & eface) — [`Go-Interface-Internals/LEARN.md`](Go-Interface-Internals/LEARN.md)
+
+**Concepts:** iface, eface, itab, type assertions, "nil is not nil" bug
+
+Go interfaces are **two-word data structures** (16 bytes):
+- **eface** (`any`): `{_type, data}` — used for empty interface
+- **iface** (method interface): `{itab, data}` — itab caches method dispatch (O(1))
+- **"Nil is not nil"** — returning nil pointer as interface creates non-nil iface (itab non-nil, data nil)
+| Type assertion is O(1) pointer comparison
+---
+
+### 37. Generics — [`Generics/generics.go`](Generics/generics.go)
+
 **Concepts:** type parameters `[T any]`, constraints, generic structs, generic functions
 
 ```go
@@ -875,6 +1136,8 @@ func (s *Stack[T]) Push(item T) {
 
 # Executable files (package main)
 go run "Get Started/main.go"
+go run "Type Conversion/conversion.go"
+go run Operators/operators.go
 go run For/loop.go
 go run "If-Else/Else.go"
 go run "Array /arr.go"
@@ -887,25 +1150,31 @@ go run "Functions/function.go"
 go run "Functions/Multiple Return Values.go"
 go run "Functions/Variadic Functions.go"
 go run "Functions/Closures.go"
+go run Recursion/recursion.go
 go run Methods/Methods.go
 go run Interfaces/interfaces.go
 go run "Struct-Embedding/struct-embedding.go"
+go run Structs/Structs.go
 go run Pointers/pointers.go
+go run Enums/enums.go
 go run strings-and-runes/strings-and-runes.go
+go run Strings-Builder/strings_builder.go
+go run "Error Handling/errors.go"
 go run Generics/generics.go
-	go run Channels/channel.go
-	go run GoRoutines/goroutines.go
-	go run Concurrency/concurrency.go
-	go run Memory/memory.go
+go run Channels/channel.go
+go run GoRoutines/goroutines.go
+go run Concurrency/concurrency.go
+go run Memory/memory.go
 
-	# Escape analysis compiler output
-	go build -gcflags="-m" Memory/escape-analysis.go
+# Escape analysis compiler output
+go build -gcflags="-m" Memory/escape-analysis.go
 
 # Reference-only files (package not main — read for learning)
 # Variables/Declare Variables.go   — package variables
 # Variables/Constants.go          — package variables
 # Interface/Interfaces.go         — older duplicate, see Interfaces/
-# Structs/Structs.go              — stub (placeholder)
+# Structs/Structs.go              — now fully implemented
+# Packages-Modules/main.go        — module main (read for package organization)
 ```
 
 > **Note:** Some files in `Variables/` and `Interface/` use non-main packages for naming or organizational reasons. They're meant for reading/reference, not standalone execution. Most files in this repo are `package main` and fully runnable.
@@ -918,12 +1187,12 @@ Check out the full [[Roadmap]] in the Second Brain vault for a complete topic tr
 
 | Level | Coverage |
 |---|---|
-| Level 1 — Core Go (37 topics) | 23 ✅ (62%) |
-| Level 2 — Production Go (27 topics) | 8 ✅ (30% — Concurrency + Runtime internals) |
+| Level 1 — Core Go (37 topics) | 36 ✅ (97%) |
+| Level 2 — Production Go (27 topics) | 8 ✅ (30% — Concurrency + Runtime) |
 | Level 3 — Industry Backend (41 topics) | ❌ Not started |
-| **Total** | **30%** |
+| **Total** | **42% (44/105)** |
 
-**Up next:** Runnable Go code examples for G-P-M, GC, pipelines, and interfaces. Then Standard Library → File I/O → JSON → HTTP → Testing.
+**Up next:** Standard Library → File I/O → JSON → HTTP → Testing → Level 3 backend topics.
 
 ---
 
