@@ -14,25 +14,25 @@ import (
 // This is one of the biggest conceptual shifts when coming from Python.
 // Go's string handling is fundamentally different because:
 //
-//   ┌──────────────────────┬────────────────────────────────────────────────┐
-//   │        Go            │                  Python 3                      │
-//   ├──────────────────────┼────────────────────────────────────────────────┤
-//   │ Strings are IMMUTABLE│ Strings are IMMUTABLE bytes internally,        │
+//   ┌──────────────────────┬───────────────────────────────────────────────┐
+//   │        Go            │                  Python 3                     │
+//   ├──────────────────────┼───────────────────────────────────────────────┤
+//   │ Strings are IMMUTABLE│ Strings are IMMUTABLE bytes internally,       │
 //   │ byte SEQUENCES       │ but expose a SEQUENCE OF CODE POINTS          │
 //   │ (UTF-8 encoded)      │ (Unicode code points / characters).           │
-//   ├──────────────────────┼────────────────────────────────────────────────┤
+//   ├──────────────────────┼───────────────────────────────────────────────┤
 //   │ len(s) = BYTES       │ len(s) = CHARACTERS (code points)             │
 //   │ s[i] = RAW BYTE      │ s[i] = code point (as a 1-char string)        │
-//   │ (not a character)    │                                                │
-//   ├──────────────────────┼────────────────────────────────────────────────┤
+//   │ (not a character)    │                                               │
+//   ├──────────────────────┼───────────────────────────────────────────────┤
 //   │ rune = Unicode code  │ ord("世") → 19990                             │
 //   │ point (int32)        │ chr(19990) → "世"                             │
 //   │ '世' = 0x4E16       │                                                │
-//   ├──────────────────────┼────────────────────────────────────────────────┤
+//   ├──────────────────────┼───────────────────────────────────────────────┤
 //   │ UTF-8 everywhere     │ UTF-8 by default in files, but strings        │
 //   │ by convention        │ are stored as UCS-1/UCS-2/UCS-4 internally    │
 //   │                      │ (flexible representation, opaque to user)     │
-//   └──────────────────────┴────────────────────────────────────────────────┘
+//   └──────────────────────┴───────────────────────────────────────────────┘
 //
 // Bottom line:
 //   Python 3 strings are a sequence of Unicode code points.
